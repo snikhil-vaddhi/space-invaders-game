@@ -7,6 +7,11 @@ use rand::Rng;
 const GAME_WIDTH: f32 = 1024.0;
 const GAME_HEIGHT: f32 = 700.0;
 
+/// Updates the player's position and state based on input and game conditions
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
+/// * `delta_time` - Time elapsed since last update in seconds
+
 pub fn update_player(game_state: &mut GameState, delta_time: f64) {
     let player = &mut game_state.player;
     let dt = delta_time as f32;
@@ -31,6 +36,10 @@ pub fn update_player(game_state: &mut GameState, delta_time: f64) {
     }
 }
 
+/// Updates the alien formation's position and state
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
+/// * `delta_time` - Time elapsed since last update in seconds
 pub fn update_aliens(game_state: &mut GameState, delta_time: f64) {
     let formation = &mut game_state.alien_formation;
 
@@ -67,6 +76,12 @@ pub fn update_aliens(game_state: &mut GameState, delta_time: f64) {
     }
 }
 
+/// Marks an alien as destroyed and updates game state accordingly
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
+/// * `alien_index` - Index of the alien to destroy
+/// # Returns -> `true` if the alien was successfully destroyed, `false` otherwise
+
 pub fn destroy_alien(game_state: &mut GameState, alien_index: usize) -> bool {
     let formation = &mut game_state.alien_formation;
 
@@ -95,6 +110,10 @@ pub fn destroy_alien(game_state: &mut GameState, alien_index: usize) -> bool {
     true
 }
 
+/// Handles player shooting logic based on input and cooldown
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
+/// * `delta_time` - Time elapsed since last update in seconds
 pub fn handle_player_shooting(game_state: &mut GameState, delta_time: f64) {
     if game_state.player_shoot_cooldown > 0.0 {
         game_state.player_shoot_cooldown -= delta_time;
@@ -107,6 +126,11 @@ pub fn handle_player_shooting(game_state: &mut GameState, delta_time: f64) {
         game_state.player_shoot_cooldown = 0.5;
     }
 }
+
+/// Handles alien shooting logic based on random selection and cooldown
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
+/// * `delta_time` - Time elapsed since last update in seconds
 
 pub fn handle_alien_shooting(game_state: &mut GameState, delta_time: f64) {
     if game_state.alien_shoot_cooldown > 0.0 {
@@ -134,6 +158,11 @@ pub fn handle_alien_shooting(game_state: &mut GameState, delta_time: f64) {
     }
 }
 
+/// Updates all projectiles' positions and removes those that are off-screen
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
+/// * `delta_time` - Time elapsed since last update in seconds
+
 pub fn update_projectiles(game_state: &mut GameState, delta_time: f64) {
     let dt = delta_time as f32;
 
@@ -153,6 +182,10 @@ pub fn update_projectiles(game_state: &mut GameState, delta_time: f64) {
         .retain(|p| !p.is_off_screen(GAME_HEIGHT));
 }
 
+/// Checks if the current level is complete and prepares the next level if needed
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
+
 pub fn check_level_completion(game_state: &mut GameState) {
     if game_state.alien_formation.count_living() == 0 {
         game_state.level += 1;
@@ -163,6 +196,10 @@ pub fn check_level_completion(game_state: &mut GameState) {
         game_state.alien_formation = new_formation;
     }
 }
+
+/// Checks for game over conditions and updates game state accordingly
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
 
 pub fn check_game_over_conditions(game_state: &mut GameState) {
     if game_state.lives <= 0 {
@@ -178,6 +215,10 @@ pub fn check_game_over_conditions(game_state: &mut GameState) {
         game_state.screen = GameScreen::GameOver;
     }
 }
+
+/// Updates the mystery ship's state or spawns a new one
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
 
 pub fn update_mystery_ship(game_state: &mut GameState) {
     if let Some(ship) = &mut game_state.mystery_ship {
@@ -213,6 +254,12 @@ pub fn update_mystery_ship(game_state: &mut GameState) {
     }
 }
 
+/// Checks if a projectile has hit the mystery ship
+/// # Arguments
+/// * `mystery_ship` - Mutable reference to the optional mystery ship
+/// * `projectile` - Reference to the projectile to check
+/// # Returns ->`Some(points)` if the ship was hit, `None` otherwise
+
 pub fn check_mystery_ship_hit(
     mystery_ship: &mut Option<MysteryShip>,
     projectile: &Projectile,
@@ -234,6 +281,10 @@ pub fn check_mystery_ship_hit(
     }
     None
 }
+
+/// Checks for collisions between projectiles and game entities
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
 
 pub fn check_projectile_collisions(game_state: &mut GameState) {
     let mut projectiles_to_remove = Vec::new();
@@ -311,6 +362,11 @@ pub fn check_projectile_collisions(game_state: &mut GameState) {
     check_player_collisions(game_state);
 }
 
+/// Helper function to check for collisions between projectiles and shields
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
+/// * `shield_hits` - Mutable reference to a vector that will store shield hit information
+
 fn check_shield_projectile_collisions(
     game_state: &mut GameState,
     shield_hits: &mut Vec<(usize, bool)>,
@@ -332,6 +388,10 @@ fn check_shield_projectile_collisions(
         }
     }
 }
+
+/// Helper function to check for collisions between alien projectiles and the player
+/// # Arguments
+/// * `game_state` - Mutable reference to the current game state
 
 fn check_player_collisions(game_state: &mut GameState) {
     let mut alien_projectiles_to_remove = Vec::new();
@@ -366,5 +426,84 @@ fn check_player_collisions(game_state: &mut GameState) {
         if *idx < game_state.alien_projectiles.len() {
             game_state.alien_projectiles.remove(*idx);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::game::entities::player::Player;
+    // use crate::game::entities::shield::{Shield, ShieldType};
+    // use crate::input::key_states::KeyStates;
+
+    // Test that player moves left when left key is pressed
+    #[test]
+    fn test_player_moves_left() {
+        let mut game_state = GameState::default();
+        game_state.player = Player::default();
+        game_state.key_states.left = true;
+
+        let initial_x = game_state.player.position.x;
+        update_player(&mut game_state, 0.1);
+
+        assert!(game_state.player.position.x < initial_x);
+    }
+
+    // Test that player moves right when right key is pressed
+    #[test]
+    fn test_player_moves_right() {
+        let mut game_state = GameState::default();
+        game_state.player = Player::default();
+        game_state.key_states.right = true;
+
+        let initial_x = game_state.player.position.x;
+        update_player(&mut game_state, 0.1);
+
+        assert!(game_state.player.position.x > initial_x);
+    }
+
+    // Test that player shooting creates a projectile
+    #[test]
+    fn test_player_shooting() {
+        let mut game_state = GameState::default();
+        game_state.player = Player::default();
+        game_state.key_states.shift = true;
+        game_state.player_shoot_cooldown = 0.0;
+
+        handle_player_shooting(&mut game_state, 0.1);
+
+        assert_eq!(game_state.player_projectiles.len(), 1);
+        assert!(game_state.player_shoot_cooldown > 0.0);
+    }
+
+    // Test that alien destruction increases score
+    #[test]
+    fn test_destroy_alien() {
+        let mut game_state = GameState::default();
+        game_state.alien_formation = AlienFormation::new(GAME_WIDTH);
+        let initial_score = game_state.score;
+
+        destroy_alien(&mut game_state, 0);
+
+        assert!(!game_state.alien_formation.aliens[0].is_alive);
+        assert!(game_state.score > initial_score);
+    }
+
+    // Test that level completion creates a new alien formation
+    #[test]
+    fn test_level_completion() {
+        let mut game_state = GameState::default();
+        game_state.alien_formation = AlienFormation::new(GAME_WIDTH);
+        let initial_level = game_state.level;
+
+        // Kill all aliens
+        for alien in &mut game_state.alien_formation.aliens {
+            alien.is_alive = false;
+        }
+
+        check_level_completion(&mut game_state);
+
+        assert_eq!(game_state.level, initial_level + 1);
+        assert!(game_state.alien_formation.count_living() > 0);
     }
 }

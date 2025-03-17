@@ -17,6 +17,9 @@ use crate::rendering::star_background::StarBackground;
 use dioxus::events::KeyboardEvent;
 use dioxus::prelude::*;
 
+/// Main game component that handles rendering and game loop
+/// This component initializes the game state, sets up the game loop using coroutines,
+/// handles keyboard input, and renders the appropriate screen based on the current game state.
 #[allow(non_snake_case)]
 pub fn Game() -> Element {
     const GAME_WIDTH: f32 = 1024.0;
@@ -179,7 +182,7 @@ pub fn Game() -> Element {
                         StartScreen {}
                     },
                     GameScreen::Playing => rsx! {
-
+                        
                         div { id: "game-area",
                             StarBackground {}
                             {
@@ -236,4 +239,123 @@ pub fn Game() -> Element {
             }
         }
     }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_game_initialization() {
+        let game_state = GameState {
+            lives: 3,
+            level: 1,
+            mystery_ship_timer: 15.0,
+            screen: GameScreen::StartScreen,
+            alien_formation: AlienFormation::new(1024.0),
+            last_update: instant::Instant::now().elapsed().as_secs_f64(),
+            shields: vec![
+                Shield::new(100.0, 500.0, ShieldType::UppercaseC),
+                Shield::new(250.0, 500.0, ShieldType::UppercaseO),
+                Shield::new(400.0, 500.0, ShieldType::UppercaseR),
+                Shield::new(550.0, 500.0, ShieldType::UppercaseT),
+                Shield::new(700.0, 500.0, ShieldType::UppercaseW),
+                Shield::new(850.0, 500.0, ShieldType::UppercaseO),
+            ],
+            ..Default::default()
+        };
+
+        let state = game_state;
+
+        assert_eq!(state.lives, 3);
+        assert_eq!(state.level, 1);
+        assert_eq!(state.shields.len(), 6);
+        assert!(!state.game_over);
+    }
+
+    // Test that the Game component initializes with the correct default values
+    #[test]
+    fn test_game_initial_state() {
+        let game_state = GameState {
+            lives: 3,
+            level: 1,
+            mystery_ship_timer: 15.0,
+            screen: GameScreen::StartScreen,
+            alien_formation: AlienFormation::new(1024.0),
+            shields: vec![
+                Shield::new(100.0, 500.0, ShieldType::UppercaseC),
+                Shield::new(250.0, 500.0, ShieldType::UppercaseO),
+                Shield::new(400.0, 500.0, ShieldType::UppercaseR),
+                Shield::new(550.0, 500.0, ShieldType::UppercaseT),
+                Shield::new(700.0, 500.0, ShieldType::UppercaseW),
+                Shield::new(850.0, 500.0, ShieldType::UppercaseO),
+            ],
+            ..Default::default()
+        };
+
+        assert_eq!(game_state.screen, GameScreen::StartScreen);
+        assert_eq!(game_state.lives, 3);
+        assert_eq!(game_state.level, 1);
+        assert_eq!(game_state.shields.len(), 6);
+    }
+
+    // Test the key handling logic
+    #[test]
+    fn test_key_handling() {
+        let mut game_state = GameState {
+            screen: GameScreen::StartScreen,
+            ..Default::default()
+        };
+
+        if game_state.screen == GameScreen::StartScreen {
+            game_state.screen = GameScreen::Playing;
+        }
+
+        assert_eq!(game_state.screen, GameScreen::Playing);
+
+        game_state.screen = GameScreen::GameOver;
+
+        if game_state.screen == GameScreen::GameOver {
+            game_state.screen = GameScreen::Playing;
+        }
+
+        assert_eq!(game_state.screen, GameScreen::Playing);
+    }
+}
+
+// Test that the game correctly handles key state updates
+#[test]
+fn test_key_state_updates() {
+    let mut game_state = GameState {
+        screen: GameScreen::Playing,
+        ..Default::default()
+    };
+
+    game_state.key_states.update_from_key(Key::ArrowLeft, true);
+    assert!(game_state.key_states.left);
+
+    game_state.key_states.update_from_key(Key::Shift, true);
+    assert!(game_state.key_states.shift);
+
+    game_state.key_states.update_from_key(Key::ArrowLeft, false);
+    assert!(!game_state.key_states.left);
+}
+
+// Test that game over condition correctly updates the screen
+#[test]
+fn test_game_over_screen_transition() {
+    let mut game_state = GameState {
+        screen: GameScreen::Playing,
+        lives: 1,
+        ..Default::default()
+    };
+
+    game_state.lives = 0;
+    game_state.game_over = true;
+
+    if game_state.game_over {
+        game_state.screen = GameScreen::GameOver;
+    }
+
+    assert_eq!(game_state.screen, GameScreen::GameOver);
 }

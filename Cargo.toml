@@ -24,6 +24,8 @@ tokio = { version = "1", features = ["time"] }
 async-std = "1.12"
 dioxus-hooks = "0.6.0"
 dioxus-desktop = "0.6.0"
+float_eq = "0.6"
+dioxus-ssr = "0.4"
 
 [features]
 default = ["desktop"]
@@ -46,3 +48,7 @@ inherits = "dev"
 # For web storage (only needed for web builds)
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 web-sys = { version = "0.3", features = ["Storage", "Window"] }
+
+[lib]
+name = "space_invaders"
+path = "src/lib.rs"
