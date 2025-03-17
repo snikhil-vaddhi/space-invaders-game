@@ -1,0 +1,48 @@
+[package]
+name = "space_invaders"
+version = "0.1.0"
+authors = ["nightblood18 <114045738+nightblood18@users.noreply.github.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dioxus = { version = "0.6.0", features = [] }
+rand = "0.8.5"
+gloo-storage = "0.2.2"
+js-sys = "0.3.64"
+instant = "0.1"
+web-sys = { version = "0.3", features = [
+    "KeyboardEvent", 
+    "Performance", 
+    "Window",
+    "Storage",
+    "console"
+]}
+wasm-bindgen = "0.2"
+tokio = { version = "1", features = ["time"] }
+async-std = "1.12"
+dioxus-hooks = "0.6.0"
+dioxus-desktop = "0.6.0"
+
+[features]
+default = ["desktop"]
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop"]
+mobile = ["dioxus/mobile"]
+
+[profile]
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"
+
+# For web storage (only needed for web builds)
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys = { version = "0.3", features = ["Storage", "Window"] }
