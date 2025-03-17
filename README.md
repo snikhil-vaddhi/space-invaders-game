@@ -71,7 +71,10 @@ This is a Space Invaders clone built with Rust and Dioxus. The game features cla
 
 ### Running Tests
 
-dx test
+dx check 
+and then use the rust builtin testing framework 
+cargo test
+
 
 ### Hot Reloading
 During development, you can use the Dioxus hot reloading feature: dx serve --hot
