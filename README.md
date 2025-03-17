@@ -79,7 +79,7 @@ cargo test
 
 
 ### Hot Reloading
-During development, you can use the Dioxus hot reloading feature: dx serve --hot
+During development, you can use the Dioxus hot reloading feature: dx serve --hot-reload true
 
 ## Credits: 
 - Game design inspired by the classic 1978 Space Invaders arcade game
