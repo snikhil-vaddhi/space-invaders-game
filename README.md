@@ -46,6 +46,7 @@ Install the Dioxus CLI with: cargo binstall dioxus-cli (recommended) or cargo in
 Building from Source: 
 
 Clone the repository: git clone https://github.com/snikhil-vaddhi/space-invaders-game.git
+
 cd space-invaders
 
 Run the game in development mode: dx serve
