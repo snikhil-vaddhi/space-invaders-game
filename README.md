@@ -14,34 +14,50 @@ Multiple levels with increasing difficulty
 Features
 
 Responsive controls using keyboard input
+
 Animated sprites for all game elements
+
 Destructible shields with letter-shaped patterns
+
 Increasing game difficulty as levels progress
+
 Game state management with proper separation of concerns
+
 Comprehensive test suite with unit and integration tests
+
 
 How to Play
 
 Controls
 
 Left/Right Arrow Keys: Move your ship horizontally
+
 Shift Key: Fire projectiles
+
 Enter Key: Start the game from the title screen
+
 Tab Key: Restart after game over
+
 
 Gameplay
 
 Destroy all aliens to advance to the next level
+
 Avoid alien projectiles
+
 Don't let aliens reach the bottom of the screen
+
 Try to achieve the highest score possible
+
 
 Installation - 
 
 Prerequisites:
 
 Rust (latest stable version)
+
 Install the Dioxus CLI with: cargo binstall dioxus-cli (recommended) or cargo install dioxus-cli
+
 
 Building from Source: 
 
@@ -60,11 +76,17 @@ Development:
 Project Structure: 
 
 src/game/: Game logic and state management
+
 src/game/entities/: Game entities (player, aliens, projectiles, etc.)
+
 src/game/logic.rs: Core game logic
+
 src/rendering/: UI components and rendering
+
 src/input/: Input handling
+
 src/utils/: Utility functions and helpers
+
 
 Running Tests
 
