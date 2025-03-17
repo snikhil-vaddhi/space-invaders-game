@@ -36,25 +36,28 @@ Avoid alien projectiles
 Don't let aliens reach the bottom of the screen
 Try to achieve the highest score possible
 
-Installation
+Installation - 
 
-Prerequisites
+Prerequisites:
 
 Rust (latest stable version)
 Install the Dioxus CLI with: cargo binstall dioxus-cli (recommended) or cargo install dioxus-cli
 
-Building from Source
+Building from Source: 
 
 Clone the repository: git clone https://github.com/snikhil-vaddhi/space-invaders-game.git
 cd space-invaders
 
 Run the game in development mode: dx serve
+
 Build the game for release:: dx build --release
+
 Bundle the game for distribution: dx bundle --release
 
-Development
+Development: 
 
-Project Structure
+Project Structure: 
+
 src/game/: Game logic and state management
 src/game/entities/: Game entities (player, aliens, projectiles, etc.)
 src/game/logic.rs: Core game logic
@@ -66,12 +69,12 @@ Running Tests
 
 dx test
 
-Hot Reloading
+Hot Reloading - 
 During development, you can use the Dioxus hot reloading feature: dx serve --hot
 
-Credits
+Credits: 
 Game design inspired by the classic 1978 Space Invaders arcade game
 Built with Dioxus - a Rust-based UI framework
 
-License
+License: 
 This project is licensed under the MIT License - see the LICENSE file for details.
