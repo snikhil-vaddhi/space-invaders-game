@@ -1,7 +1,12 @@
 [application]
 
-[web.app]
+[bundle]
+identifier = "com.snikhil-vaddhi.space-invaders"
+name = "Space Invaders"
+version = "0.1.0"
+publisher = "SNikhil-Vaddhi"
 
+[web.app]
 # HTML title tag content
 title = "space_invaders"
 
