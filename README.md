@@ -85,5 +85,3 @@ During development, you can use the Dioxus hot reloading feature: dx serve --hot
 - Game design inspired by the classic 1978 Space Invaders arcade game
 - Built with Dioxus - a Rust-based UI framework
 
-## License: 
-This project is licensed under the MIT License - see the LICENSE file for details.
