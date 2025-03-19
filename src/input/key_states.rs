@@ -1,3 +1,4 @@
+use dioxus::events::Key;
 /// Tracks the state of keyboard inputs relevant to the game
 /// This struct maintains boolean flags for each key that the game responds to,
 /// allowing the game logic to easily check which keys are currently pressed.
@@ -33,11 +34,11 @@ impl KeyStates {
 
     pub fn update_from_key(&mut self, key: dioxus::events::Key, pressed: bool) {
         match key {
-            dioxus::events::Key::ArrowLeft => self.left = pressed,
-            dioxus::events::Key::ArrowRight => self.right = pressed,
-            dioxus::events::Key::Shift => self.shift = pressed,
-            dioxus::events::Key::Tab => self.tab = pressed,
-            dioxus::events::Key::Enter => self.enter = pressed,
+            Key::ArrowLeft => self.left = pressed,
+            Key::ArrowRight => self.right = pressed,
+            Key::Shift => self.shift = pressed,
+            Key::Tab => self.tab = pressed,
+            Key::Enter => self.enter = pressed,
 
             _ => {}
         }
