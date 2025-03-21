@@ -182,7 +182,6 @@ pub fn Game() -> Element {
                         StartScreen {}
                     },
                     GameScreen::Playing => rsx! {
-                        
                         div { id: "game-area",
                             StarBackground {}
                             {
